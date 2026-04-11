@@ -1,58 +1,71 @@
 const openDrawer = document.getElementById('openDrawer');
 const drawer = document.getElementById('drawer');
 const toast = document.getElementById('toast');
-const checkForm = document.getElementById('checkForm');
 const navItems = document.querySelectorAll('.nav-item');
-const drawerItems = document.querySelectorAll('.drawer-item');
+const drawerItems = document.querySelectorAll('.drawer-item[data-tab-target]');
+const utilityItems = document.querySelectorAll('.drawer-item[data-utility-target]');
 const quickButtons = document.querySelectorAll('[data-tab-jump]');
 const screens = document.querySelectorAll('.tab-screen');
 
 const state = {
-  totalFleet: 186,
-  activeMachines: 161,
-  maintenanceSoon: 24,
-  criticalAlerts: 9,
-  checklistCount: 142,
-  efficiency: 87,
-  riskScore: 72,
-  telemetry: [
-    { name: 'CAT 374 Ekskavatör', detail: 'Kazı Alanı A · Operatör: M. Kaya', status: 'active', label: 'Aktif' },
-    { name: 'Komatsu HD785 Kaya Kamyonu', detail: 'Taşıma Koridoru · Operatör: A. Yılmaz', status: 'active', label: 'Aktif' },
-    { name: 'Volvo EC480', detail: 'Bakım Alanına Yönlendirildi', status: 'service', label: 'Servis' },
-    { name: 'Mercedes Arocs Servis Aracı', detail: 'Yakıt İkmal Noktası', status: 'idle', label: 'Beklemede' }
+  totalVehicles: 48,
+  activeVehicles: 39,
+  maintenanceDue: 6,
+  criticalAlerts: 3,
+  fuelToday: 1284,
+  openMaint: 4,
+  shiftDrivers: 18,
+  docAlerts: 5,
+  fuelMonthTotal: 18460,
+  fuelMonthCost: 912500,
+  fuelAvgConsume: 14.8,
+  plannedMaintenance: 8,
+  openFaults: 3,
+  maintenanceMonthCost: 184700,
+  riskHigh: 2,
+  riskMedium: 5,
+  riskLow: 11,
+  insights: [
+    '2 araçta bakım yaklaşırken 1 araçta yakıt verimsizliği dikkat çekiyor.',
+    'Sigortası yaklaşan araçlar nedeniyle evrak takibi önceliklendirilmeli.',
+    'Rölanti süresi artan araçlarda kullanım alışkanlığı incelemesi önerilir.',
+    'Periyodik bakım planı erkene çekilirse aylık arıza riski düşebilir.'
   ],
-  feed: [
-    { color: 'lime', title: 'Operasyon başladı', text: 'Sabah vardiyası başarıyla devreye alındı.', time: 'Az önce' },
-    { color: 'purple', title: 'Telemetri güncellendi', text: 'Aktif makine sayısı yeniden hesaplandı.', time: '1 dk önce' },
-    { color: 'orange', title: 'Bakım planı üretildi', text: '2 ekipman için servis planı oluşturuldu.', time: '3 dk önce' },
-    { color: 'red', title: 'Yakıt alarmı oluştu', text: 'Bir araçta anormal tüketim gözlendi.', time: '5 dk önce' }
+  todayTasks: [
+    { title: '34 NFY 102', text: 'Muayene bitişine 9 gün kaldı.' },
+    { title: '06 NVA 245', text: 'Periyodik bakım 420 km içinde.' },
+    { title: '34 FLY 889', text: 'Sigorta yenileme planlanmalı.' }
   ],
-  alerts: [
-    { title: 'CAT 374', text: '12 saat içinde bakım eşiğine ulaşacak.' },
-    { title: 'Komatsu HD785', text: 'Motor saati kritik bakım sınırına yaklaşıyor.' },
-    { title: 'Volvo EC480', text: 'Hidrolik sistem kontrolü öneriliyor.' }
-  ],
-  timeline: [
-    { title: 'CAT 374', text: '07:12 · M. Kaya check-list tamamladı' },
-    { title: 'Komatsu HD785', text: '07:18 · A. Yılmaz check-list tamamladı' },
-    { title: 'Volvo EC480', text: '07:26 · Hidrolik uyarısı not edildi' }
-  ],
-  novaSuggestions: [
-    { title: 'NoVa AI verimlilik yorumu', text: 'Komatsu HD785 için rölanti süresi yükseliyor. Vardiya alışkanlıkları kontrol edilmeli.' },
-    { title: 'NoVa AI bakım tahmini', text: 'CAT 374 bakım periyodu mevcut üretim planına göre erkene çekilebilir.' },
-    { title: 'NoVa AI operasyon analizi', text: 'Servis araçlarında bekleme süresi optimizasyon potansiyeli taşıyor.' }
+  vehicles: [
+    { plate: '34 NVA 001', info: 'Ford Transit • Dizel • Şoför: Ahmet K.', status: 'active', label: 'Aktif' },
+    { plate: '34 NVA 118', info: 'Fiat Doblo • Dizel • Şoför: Mehmet T.', status: 'idle', label: 'Beklemede' },
+    { plate: '06 NVA 245', info: 'Mercedes Atego • Dizel • Şoför: Burak Y.', status: 'service', label: 'Serviste' },
+    { plate: '34 FLY 889', info: 'Renault Master • Dizel • Şoför: Hasan A.', status: 'active', label: 'Aktif' }
   ],
   fuelRows: [
-    { name: 'CAT 374', motor: '8.4 s', fuel: '312 L', idle: '52 dk', score: 'İyi', className: 'good' },
-    { name: 'Komatsu HD785', motor: '10.1 s', fuel: '498 L', idle: '95 dk', score: 'İzlenmeli', className: 'warn' },
-    { name: 'Volvo EC480', motor: '4.2 s', fuel: '141 L', idle: '18 dk', score: 'İyi', className: 'good' },
-    { name: 'Arocs Servis', motor: '6.7 s', fuel: '74 L', idle: '31 dk', score: 'Düşük', className: 'bad' }
+    { vehicle: '34 NVA 001', litre: '92 L', amount: '₺4.815', meter: '214.320 km', tag: 'Normal', tagClass: 'good' },
+    { vehicle: '34 NVA 118', litre: '68 L', amount: '₺3.562', meter: '187.550 km', tag: 'İzlenmeli', tagClass: 'warn' },
+    { vehicle: '06 NVA 245', litre: '146 L', amount: '₺7.644', meter: '8.420 s', tag: 'Kritik', tagClass: 'bad' },
+    { vehicle: '34 FLY 889', litre: '81 L', amount: '₺4.237', meter: '294.105 km', tag: 'Normal', tagClass: 'good' }
   ],
-  insights: [
-    'Komatsu HD785 için rölanti süresi artıyor. Yakıt optimizasyon kontrolü öneriliyor.',
-    'CAT 374 bakım planı erkene çekilirse arıza riski düşebilir.',
-    'Servis araçlarında bekleme süresi operasyon akışına göre yeniden ayarlanabilir.',
-    'Volvo EC480 hidrolik izleme verisi artan dikkat ihtiyacına işaret ediyor.'
+  fuelAlerts: [
+    { title: '06 NVA 245', text: 'Son 3 kayıtta ortalamanın üzerinde tüketim görüldü.' },
+    { title: '34 NVA 118', text: 'Litre/km oranı önceki döneme göre yükseldi.' }
+  ],
+  maintenanceList: [
+    { title: '34 NVA 001', text: 'Yağ ve filtre bakımı 6 gün içinde planlanmalı.' },
+    { title: '06 NVA 245', text: 'Fren kontrolü ve genel servis bekliyor.' },
+    { title: '34 FLY 889', text: 'Periyodik bakım kilometresi yaklaşıyor.' }
+  ],
+  maintenanceTimeline: [
+    { title: '34 NVA 001', text: '02 Nisan • Yağ değişimi tamamlandı.' },
+    { title: '34 NVA 118', text: '29 Mart • Lastik kontrolü işlendi.' },
+    { title: '06 NVA 245', text: '25 Mart • Arıza kaydı açıldı.' }
+  ],
+  novaSuggestions: [
+    { title: 'NoVa AI Yakıt Yorumu', text: '06 NVA 245 için yüksek tüketim eğilimi sürüyor, sürüş ve yük analizi önerilir.' },
+    { title: 'NoVa AI Bakım Tahmini', text: '34 NVA 001 bakım erkene çekilirse plansız arıza ihtimali azalabilir.' },
+    { title: 'NoVa AI Evrak Uyarısı', text: '5 araçta evrak süreleri kritik eşiğe yaklaşıyor.' }
   ]
 };
 
@@ -81,6 +94,15 @@ quickButtons.forEach(item => {
   item.addEventListener('click', () => setActiveTab(item.dataset.tabJump));
 });
 
+utilityItems.forEach(item => {
+  item.addEventListener('click', () => {
+    toast.textContent = `${item.dataset.utilityTarget} modülü sonraki sürümde açılacak.`;
+    toast.classList.add('show');
+    drawer.classList.remove('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  });
+});
+
 if (openDrawer) {
   openDrawer.addEventListener('click', () => drawer.classList.toggle('show'));
 }
@@ -100,14 +122,6 @@ function timeNow() {
   return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-function randomBetween(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function randomChoice(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
 function flashText(id, value) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -117,69 +131,35 @@ function flashText(id, value) {
   el.classList.add('flash');
 }
 
-function renderTelemetry() {
-  const el = document.getElementById('telemetryList');
-  if (!el) return;
+function randomBetween(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
-  el.innerHTML = state.telemetry.map(item => `
-    <div class="machine-item">
+function randomChoice(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function renderTasks() {
+  const el = document.getElementById('todayTasks');
+  if (!el) return;
+  el.innerHTML = state.todayTasks.map(item => `
+    <div class="list-item">
+      <strong>${item.title}</strong>
+      <p>${item.text}</p>
+    </div>
+  `).join('');
+}
+
+function renderVehicles() {
+  const el = document.getElementById('vehicleList');
+  if (!el) return;
+  el.innerHTML = state.vehicles.map(item => `
+    <div class="vehicle-item">
       <div>
-        <strong>${item.name}</strong>
-        <p>${item.detail}</p>
+        <strong>${item.plate}</strong>
+        <p>${item.info}</p>
       </div>
-      <span class="status ${item.status}">${item.label}</span>
-    </div>
-  `).join('');
-}
-
-function renderFeed() {
-  const el = document.getElementById('liveFeed');
-  if (!el) return;
-
-  el.innerHTML = state.feed.map(item => `
-    <div class="feed-item">
-      <span class="feed-dot ${item.color}"></span>
-      <div>
-        <strong>${item.title}</strong>
-        <p>${item.text}</p>
-      </div>
-      <span class="feed-time">${item.time}</span>
-    </div>
-  `).join('');
-}
-
-function renderAlerts() {
-  const el = document.getElementById('maintenanceAlertList');
-  if (!el) return;
-
-  el.innerHTML = state.alerts.map(item => `
-    <div class="alert-item">
-      <strong>${item.title}</strong>
-      <p>${item.text}</p>
-    </div>
-  `).join('');
-}
-
-function renderTimeline() {
-  const el = document.getElementById('timelineList');
-  if (!el) return;
-
-  el.innerHTML = state.timeline.map(item => `
-    <div class="timeline-item">
-      <strong>${item.title}</strong>
-      <p>${item.text}</p>
-    </div>
-  `).join('');
-}
-
-function renderNovaSuggestions() {
-  const el = document.getElementById('novaSuggestionList');
-  if (!el) return;
-
-  el.innerHTML = state.novaSuggestions.map(item => `
-    <div class="nova-item">
-      <strong>${item.title}</strong>
-      <p>${item.text}</p>
+      <span class="status-pill ${item.status}">${item.label}</span>
     </div>
   `).join('');
 }
@@ -187,158 +167,181 @@ function renderNovaSuggestions() {
 function renderFuelTable() {
   const el = document.getElementById('fuelTableBody');
   if (!el) return;
-
   el.innerHTML = state.fuelRows.map(row => `
     <tr>
-      <td>${row.name}</td>
-      <td>${row.motor}</td>
-      <td>${row.fuel}</td>
-      <td>${row.idle}</td>
-      <td><span class="pill ${row.className}">${row.score}</span></td>
+      <td>${row.vehicle}</td>
+      <td>${row.litre}</td>
+      <td>${row.amount}</td>
+      <td>${row.meter}</td>
+      <td><span class="tag ${row.tagClass}">${row.tag}</span></td>
     </tr>
   `).join('');
 }
 
+function renderFuelAlerts() {
+  const el = document.getElementById('fuelAlertsList');
+  if (!el) return;
+  el.innerHTML = state.fuelAlerts.map(item => `
+    <div class="list-item">
+      <strong>${item.title}</strong>
+      <p>${item.text}</p>
+    </div>
+  `).join('');
+}
+
+function renderMaintenance() {
+  const list = document.getElementById('maintenanceList');
+  const timeline = document.getElementById('maintenanceTimeline');
+  if (list) {
+    list.innerHTML = state.maintenanceList.map(item => `
+      <div class="list-item">
+        <strong>${item.title}</strong>
+        <p>${item.text}</p>
+      </div>
+    `).join('');
+  }
+  if (timeline) {
+    timeline.innerHTML = state.maintenanceTimeline.map(item => `
+      <div class="timeline-item">
+        <strong>${item.title}</strong>
+        <p>${item.text}</p>
+      </div>
+    `).join('');
+  }
+}
+
+function renderNova() {
+  const el = document.getElementById('novaSuggestions');
+  if (!el) return;
+  el.innerHTML = state.novaSuggestions.map(item => `
+    <div class="list-item">
+      <strong>${item.title}</strong>
+      <p>${item.text}</p>
+    </div>
+  `).join('');
+}
+
 function updateUI() {
-  flashText('kpiActiveMachines', state.activeMachines);
-  flashText('kpiMaintenanceSoon', state.maintenanceSoon);
+  flashText('kpiTotalVehicles', state.totalVehicles);
+  flashText('kpiActiveVehicles', state.activeVehicles);
+  flashText('kpiMaintenanceDue', state.maintenanceDue);
   flashText('kpiCriticalAlerts', state.criticalAlerts);
 
-  flashText('totalFleet', state.totalFleet);
-  flashText('checklistCount', state.checklistCount);
-  flashText('efficiencyScore', `%${state.efficiency}`);
-  flashText('riskScore', `${state.riskScore}/100`);
+  flashText('miniFuelToday', `${state.fuelToday.toLocaleString('tr-TR')} L`);
+  flashText('miniOpenMaint', state.openMaint);
+  flashText('miniShiftDrivers', state.shiftDrivers);
+  flashText('miniDocumentAlerts', state.docAlerts);
 
-  const metricFuelAlerts = document.getElementById('metricFuelAlerts');
-  if (metricFuelAlerts) {
-    flashText('metricFuelAlerts', Math.max(2, Math.min(8, state.criticalAlerts - 4)));
-  }
+  flashText('fuelMonthTotal', `${state.fuelMonthTotal.toLocaleString('tr-TR')} L`);
+  flashText('fuelMonthCost', `₺${state.fuelMonthCost.toLocaleString('tr-TR')}`);
+  flashText('fuelAvgConsume', state.fuelAvgConsume.toFixed(1));
 
-  const insight = document.getElementById('novaInsightText');
+  flashText('maintPlanned', state.plannedMaintenance);
+  flashText('maintOpenFaults', state.openFaults);
+  flashText('maintMonthCost', `₺${state.maintenanceMonthCost.toLocaleString('tr-TR')}`);
+
+  flashText('riskHigh', state.riskHigh);
+  flashText('riskMedium', state.riskMedium);
+  flashText('riskLow', state.riskLow);
+
+  const insight = document.getElementById('homeInsight');
   if (insight) insight.textContent = randomChoice(state.insights);
 
-  const updateTime = document.getElementById('dashboardUpdateTime');
-  if (updateTime) updateTime.textContent = `Güncelleme: ${timeNow()}`;
+  const vehicleTime = document.getElementById('vehiclesUpdateTime');
+  if (vehicleTime) vehicleTime.textContent = `Güncelleme: ${timeNow()}`;
 
-  renderTelemetry();
-  renderFeed();
-  renderAlerts();
-  renderTimeline();
-  renderNovaSuggestions();
+  renderTasks();
+  renderVehicles();
   renderFuelTable();
+  renderFuelAlerts();
+  renderMaintenance();
+  renderNova();
 }
 
 function mutateState() {
-  state.activeMachines = Math.max(150, Math.min(170, state.activeMachines + randomBetween(-2, 2)));
-  state.maintenanceSoon = Math.max(20, Math.min(30, state.maintenanceSoon + randomBetween(-1, 1)));
-  state.criticalAlerts = Math.max(6, Math.min(12, state.criticalAlerts + randomBetween(-1, 1)));
-  state.checklistCount = Math.max(130, Math.min(180, state.checklistCount + randomBetween(0, 2)));
-  state.efficiency = Math.max(82, Math.min(92, state.efficiency + randomBetween(-1, 1)));
-  state.riskScore = Math.max(62, Math.min(88, state.riskScore + randomBetween(-2, 2)));
+  state.activeVehicles = Math.max(34, Math.min(43, state.activeVehicles + randomBetween(-1, 1)));
+  state.maintenanceDue = Math.max(4, Math.min(9, state.maintenanceDue + randomBetween(-1, 1)));
+  state.criticalAlerts = Math.max(2, Math.min(5, state.criticalAlerts + randomBetween(-1, 1)));
+  state.fuelToday = Math.max(1100, Math.min(1500, state.fuelToday + randomBetween(-35, 35)));
+  state.openMaint = Math.max(2, Math.min(6, state.openMaint + randomBetween(-1, 1)));
+  state.shiftDrivers = Math.max(14, Math.min(22, state.shiftDrivers + randomBetween(-1, 1)));
+  state.docAlerts = Math.max(3, Math.min(7, state.docAlerts + randomBetween(-1, 1)));
+  state.fuelAvgConsume = Math.max(13.2, Math.min(16.1, state.fuelAvgConsume + (randomBetween(-2, 2) / 10)));
+
+  state.riskHigh = Math.max(1, Math.min(3, state.riskHigh + randomBetween(-1, 1)));
+  state.riskMedium = Math.max(4, Math.min(7, state.riskMedium + randomBetween(-1, 1)));
+  state.riskLow = Math.max(8, Math.min(14, state.riskLow + randomBetween(-1, 1)));
 
   const statuses = [
     { status: 'active', label: 'Aktif' },
     { status: 'idle', label: 'Beklemede' },
-    { status: 'service', label: 'Servis' }
+    { status: 'service', label: 'Serviste' }
   ];
 
-  state.telemetry = state.telemetry.map(item => {
+  state.vehicles = state.vehicles.map(item => {
     const picked = randomChoice(statuses);
     return { ...item, status: picked.status, label: picked.label };
   });
 
-  const telemetryNames = state.telemetry.map(t => t.name);
-  const chosenMachine = randomChoice(telemetryNames);
+  const vehicleNames = state.vehicles.map(v => v.plate);
 
-  state.feed.unshift({
-    color: randomChoice(['purple', 'lime', 'orange', 'red']),
-    title: randomChoice([
-      'Durum değişimi algılandı',
-      'Yeni operasyon kaydı işlendi',
-      'NoVa AI uyarı üretti',
-      'Sistem verisi güncellendi'
-    ]),
-    text: `${chosenMachine} için yeni veri işlendi.`,
-    time: 'Şimdi'
-  });
-  state.feed = state.feed.slice(0, 5);
-
-  state.timeline.unshift({
-    title: chosenMachine,
-    text: `${timeNow()} · Yeni operasyon kaydı işlendi`
-  });
-  state.timeline = state.timeline.slice(0, 4);
-
-  state.alerts[0] = {
-    title: randomChoice(telemetryNames),
+  state.todayTasks[0] = {
+    title: randomChoice(vehicleNames),
     text: randomChoice([
-      'Bakım periyodu yaklaşmak üzere.',
-      'Servis planlaması öneriliyor.',
-      'Motor saati eşiği yükseliyor.',
-      'NoVa AI bu ekipman için kontrol öneriyor.'
+      'Vergi bitişine 12 gün kaldı.',
+      'Sigorta yenileme süreci başlatılmalı.',
+      'Periyodik bakım planına alınmalı.',
+      'Muayene tarihi yaklaşıyor.'
+    ])
+  };
+
+  state.fuelAlerts[0] = {
+    title: randomChoice(vehicleNames),
+    text: randomChoice([
+      'Yakıt tüketimi ortalamanın üzerine çıktı.',
+      'Son dolum sonrası litre/km oranı arttı.',
+      'Yakıt kaydı önceki döneme göre sapma gösteriyor.'
+    ])
+  };
+
+  state.maintenanceList[0] = {
+    title: randomChoice(vehicleNames),
+    text: randomChoice([
+      'Genel bakım planlaması bekliyor.',
+      'Fren ve yağ kontrolü öneriliyor.',
+      'Servis kilometresi kritik eşiğe yaklaşıyor.'
     ])
   };
 
   state.novaSuggestions[0] = {
     title: randomChoice([
-      'NoVa AI verimlilik yorumu',
-      'NoVa AI bakım tahmini',
-      'NoVa AI operasyon analizi'
+      'NoVa AI Yakıt Yorumu',
+      'NoVa AI Bakım Tahmini',
+      'NoVa AI Evrak Uyarısı'
     ]),
     text: randomChoice(state.insights)
   };
 
   state.fuelRows = state.fuelRows.map(row => {
-    const fuelValue = parseInt(row.fuel, 10) + randomBetween(-12, 12);
-    const idleValue = parseInt(row.idle, 10) + randomBetween(-7, 7);
+    const litre = parseInt(row.litre, 10) + randomBetween(-6, 6);
+    let tagClass = 'good';
+    let tag = 'Normal';
 
-    let className = 'good';
-    let score = 'İyi';
-
-    if (fuelValue > 430 || idleValue > 80) {
-      className = 'warn';
-      score = 'İzlenmeli';
+    if (litre > 100) {
+      tagClass = 'warn';
+      tag = 'İzlenmeli';
     }
-    if (fuelValue > 500 || idleValue > 95) {
-      className = 'bad';
-      score = 'Düşük';
+    if (litre > 130) {
+      tagClass = 'bad';
+      tag = 'Kritik';
     }
 
     return {
       ...row,
-      fuel: `${Math.max(55, fuelValue)} L`,
-      idle: `${Math.max(8, idleValue)} dk`,
-      className,
-      score
+      litre: `${Math.max(50, litre)} L`,
+      tagClass,
+      tag
     };
-  });
-}
-
-if (checkForm) {
-  checkForm.addEventListener('submit', e => {
-    e.preventDefault();
-
-    state.checklistCount += 1;
-    state.feed.unshift({
-      color: 'lime',
-      title: 'Check-list kaydedildi',
-      text: 'Yeni operatör formu demo olarak işlendi.',
-      time: 'Şimdi'
-    });
-    state.feed = state.feed.slice(0, 5);
-
-    state.timeline.unshift({
-      title: 'Yeni Check-list',
-      text: `${timeNow()} · Operatör formu başarıyla kaydedildi`
-    });
-    state.timeline = state.timeline.slice(0, 4);
-
-    updateUI();
-    toast.classList.add('show');
-
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 2200);
   });
 }
 
