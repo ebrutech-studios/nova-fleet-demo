@@ -2,9 +2,9 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nova Fleet Intelligence | Enterprise Mining Demo</title>
-  <meta name="description" content="Nova Fleet Intelligence - ağır iş makineleri ve filo operasyonları için akıllı denetim, yakıt takibi, HMR izleme ve bakım planlama demo platformu." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>NoVa Fleet OS | AI Altyapılı Filo Operasyon Demo</title>
+  <meta name="description" content="NoVa AI altyapısıyla güçlendirilmiş ağır iş makinesi ve filo operasyon yönetim demo uygulaması." />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -12,219 +12,177 @@
   <div class="bg-orb orb-2"></div>
   <div class="bg-grid"></div>
 
-  <header class="site-header">
-    <div class="container nav">
-      <a href="#" class="brand">
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-wrap">
         <div class="brand-logo">N</div>
         <div class="brand-text">
-          <strong>Nova Fleet</strong>
-          <span>Enterprise Intelligence Demo</span>
+          <strong>NoVa Fleet OS</strong>
+          <span>AI Altyapılı Operasyon Paneli</span>
         </div>
-      </a>
+      </div>
 
-      <nav class="menu" id="menu">
-        <a href="#overview">Genel Bakış</a>
-        <a href="#modules">Modüller</a>
-        <a href="#dashboard">Dashboard</a>
-        <a href="#checklist">Check-list</a>
-        <a href="#activity">Canlı Akış</a>
-        <a href="#contact">İletişim</a>
-      </nav>
+      <div class="topbar-actions">
+        <button class="top-btn" id="notifyBtn">⦿</button>
+        <button class="top-btn" id="menuToggle">☰</button>
+      </div>
+    </header>
 
-      <button class="menu-toggle" id="menuToggle">☰</button>
+    <div class="top-banner">
+      <div class="banner-pill">NoVa AI Core</div>
+      <div class="banner-text">
+        Bu demo, <strong>NoVa AI altyapısı</strong> ile geliştirilen akıllı filo yönetim yaklaşımını yansıtır.
+      </div>
     </div>
-  </header>
 
-  <main>
-    <section class="hero" id="overview">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <span class="eyebrow">INDUSTRIAL OPERATIONS DEMO</span>
-          <h1>
-            Ağır İş Makinesi ve
-            <span>Filo Denetimini</span>
-            Tek Platformda Toplayın
-          </h1>
-          <p>
-            Nova Fleet Intelligence; operatör check-list, yakıt verimlilik analizi,
-            motor saati takibi, bakım uyarıları ve merkezi yönetim panelini modern bir
-            kurumsal arayüzde birleştiren demo çözümdür.
-          </p>
+    <aside class="drawer" id="drawer">
+      <div class="drawer-card">
+        <div class="drawer-title">NoVa Fleet OS</div>
+        <div class="drawer-subtitle">Enterprise Demo Menüsü</div>
 
-          <div class="hero-actions">
-            <a href="#dashboard" class="btn btn-primary">Canlı Demo Görünümü</a>
-            <a href="#contact" class="btn btn-secondary">Toplantı Talep Et</a>
+        <button class="drawer-link" data-tab-target="overview">Genel Bakış</button>
+        <button class="drawer-link" data-tab-target="operations">Operasyon</button>
+        <button class="drawer-link" data-tab-target="analytics">Analiz</button>
+        <button class="drawer-link" data-tab-target="checklist">Check-list</button>
+        <button class="drawer-link" data-tab-target="nova">NoVa AI</button>
+      </div>
+    </aside>
+
+    <main class="screen-container">
+      <section class="screen active" id="screen-overview">
+        <div class="hero-card">
+          <div class="hero-copy">
+            <span class="eyebrow">NOVA AI POWERED</span>
+            <h1>Ağır İş Makineleri İçin Modern Operasyon Uygulaması</h1>
+            <p>
+              NoVa Fleet OS; yakıt takibi, bakım planlama, araç durumu, operatör kontrolü
+              ve akıllı önerileri tek mobil deneyimde birleştiren yeni nesil yönetim panelidir.
+            </p>
           </div>
 
-          <div class="hero-mini-stats">
-            <div class="mini-card">
-              <span>Takip Edilen Varlık</span>
-              <strong id="heroTotalAssets">186</strong>
-            </div>
-            <div class="mini-card">
-              <span>Bugünkü Dijital Check-list</span>
-              <strong id="heroChecklistCount">142</strong>
-            </div>
-            <div class="mini-card">
-              <span>Kritik Uyarı</span>
-              <strong id="heroCriticalCount">9</strong>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero-panel">
-          <div class="glass-card">
-            <div class="glass-head">
+          <div class="hero-side-card">
+            <div class="hero-side-head">
               <span class="live-dot"></span>
-              <strong>Canlı Operasyon Özeti</strong>
-              <small>Demo Veri</small>
+              <strong>Canlı Sistem Durumu</strong>
             </div>
-
-            <div class="metric-grid">
-              <div class="metric-card">
+            <div class="hero-side-grid">
+              <div class="mini-metric">
                 <span>Aktif Makine</span>
                 <strong id="metricActiveMachines">161</strong>
-                <small>şu an sahada</small>
               </div>
-              <div class="metric-card">
-                <span>Yaklaşan Bakım</span>
-                <strong id="metricUpcomingMaintenance">24</strong>
-                <small>50 saat içinde</small>
+              <div class="mini-metric">
+                <span>Kritik Uyarı</span>
+                <strong id="metricCriticalAlerts">9</strong>
               </div>
-              <div class="metric-card">
-                <span>Verimlilik Skoru</span>
+              <div class="mini-metric">
+                <span>Verimlilik</span>
                 <strong id="metricEfficiency">%87</strong>
-                <small>son 24 saat</small>
               </div>
-              <div class="metric-card">
+              <div class="mini-metric">
                 <span>Yakıt Alarmı</span>
                 <strong id="metricFuelAlerts">4</strong>
-                <small>inceleme gerekli</small>
-              </div>
-            </div>
-
-            <div class="telemetry-preview" id="heroTelemetryPreview">
-              <div class="telemetry-row">
-                <div>
-                  <strong>CAT 374</strong>
-                  <p>Kazı Alanı A · Operatör aktif</p>
-                </div>
-                <span class="status active">Aktif</span>
-              </div>
-              <div class="telemetry-row">
-                <div>
-                  <strong>Komatsu HD785</strong>
-                  <p>Taşıma Hattı 2 · Yük altında</p>
-                </div>
-                <span class="status active">Aktif</span>
-              </div>
-              <div class="telemetry-row">
-                <div>
-                  <strong>Volvo EC480</strong>
-                  <p>Servis Öncesi Bekleme</p>
-                </div>
-                <span class="status idle">Beklemede</span>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <section class="section" id="modules">
-      <div class="container">
-        <div class="section-head">
-          <span class="eyebrow">ÇÖZÜM MODÜLLERİ</span>
-          <h2>Kurumsal Operasyonlar İçin Temel Yapı Taşları</h2>
-          <p>
-            Bu demo, maden ve ağır ekipman operasyonlarının dijital dönüşümü için
-            örnek bir modüler yapı sunar.
-          </p>
+        <div class="section-title-row">
+          <div>
+            <h2>Yönetim Özeti</h2>
+            <p>Tek bakışta operasyonun nabzı</p>
+          </div>
         </div>
 
-        <div class="modules-grid">
-          <article class="feature-card">
-            <div class="feature-icon">📋</div>
-            <h3>Dijital Operatör Check-list</h3>
-            <p>Tablet veya mobil cihaz üzerinden vardiya başlangıç kontrollerinin hızlıca tamamlanması.</p>
-          </article>
-
-          <article class="feature-card">
-            <div class="feature-icon">🛰️</div>
-            <h3>Anlık Telemetri Paneli</h3>
-            <p>Araç durumları, aktivite bilgisi, motor saatleri ve operasyon akışının merkezden izlenmesi.</p>
-          </article>
-
-          <article class="feature-card">
-            <div class="feature-icon">⛽</div>
-            <h3>Yakıt ve Verimlilik Analizi</h3>
-            <p>Yakıt tüketimi, rölanti süreleri ve verimsizlik noktalarının raporlanması.</p>
-          </article>
-
-          <article class="feature-card">
-            <div class="feature-icon">🛠️</div>
-            <h3>Akıllı Bakım Uyarıları</h3>
-            <p>Motor saati veya periyot bazlı yaklaşan servis ihtiyaçlarının otomatik olarak bildirilmesi.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section dashboard-section" id="dashboard">
-      <div class="container">
-        <div class="section-head">
-          <span class="eyebrow">DASHBOARD DEMO</span>
-          <h2>Yönetici Ekranı</h2>
-          <p>Canlı KPI kartları, filo görünümü ve yakıt-verimlilik takibi tek panelde.</p>
-        </div>
-
-        <div class="stats-grid">
-          <div class="stat-card">
+        <div class="card-grid four">
+          <div class="metric-card large">
             <span>Toplam Filo</span>
             <strong id="statTotalFleet">186</strong>
-            <small>Ağır iş makineleri + destek araçları</small>
+            <small>Ağır makine + destek araçları</small>
           </div>
-          <div class="stat-card">
+          <div class="metric-card large">
             <span>Aktif Varlık</span>
             <strong id="statActiveFleet">161</strong>
             <small>Sahada çalışan birimler</small>
           </div>
-          <div class="stat-card warning">
+          <div class="metric-card large warning">
             <span>Bakım Yaklaşan</span>
             <strong id="statMaintenanceSoon">24</strong>
-            <small>Planlama gerekli</small>
+            <small>Planlama bekliyor</small>
           </div>
-          <div class="stat-card danger">
+          <div class="metric-card large danger">
             <span>Kritik Uyarı</span>
-            <strong id="statCriticalAlerts">9</strong>
+            <strong id="statCriticalCount">9</strong>
             <small>Hızlı aksiyon önerilir</small>
           </div>
         </div>
 
-        <div class="dashboard-grid">
-          <div class="panel">
-            <div class="panel-head">
+        <div class="feature-callout">
+          <div class="callout-icon">✦</div>
+          <div>
+            <strong>NoVa AI önerisi</strong>
+            <p id="novaInsightText">Komatsu HD785 için rölanti süresi yükseliyor. Yakıt verimliliği incelemesi öneriliyor.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-operations">
+        <div class="section-title-row">
+          <div>
+            <h2>Operasyon</h2>
+            <p>Anlık araç ve saha durumu</p>
+          </div>
+          <div class="status-chip">Canlı Demo</div>
+        </div>
+
+        <div class="stack-grid">
+          <div class="app-card">
+            <div class="card-head">
               <h3>Anlık Araç Durumu</h3>
               <small id="dashboardUpdateTime">Güncelleme: --:--</small>
             </div>
-
             <div class="telemetry-list" id="telemetryList"></div>
           </div>
 
-          <div class="panel">
-            <div class="panel-head">
-              <h3>Bakım Uyarıları</h3>
-              <small>Otomatik planlama</small>
+          <div class="app-card">
+            <div class="card-head">
+              <h3>Canlı Olay Akışı</h3>
+              <small>Otomatik güncelleniyor</small>
             </div>
+            <div class="live-feed" id="liveFeed"></div>
+          </div>
+        </div>
+      </section>
 
-            <div class="alert-list" id="maintenanceAlertList"></div>
+      <section class="screen" id="screen-analytics">
+        <div class="section-title-row">
+          <div>
+            <h2>Analiz</h2>
+            <p>Yakıt, rölanti ve bakım görünümü</p>
           </div>
         </div>
 
-        <div class="panel table-panel">
-          <div class="panel-head">
+        <div class="card-grid three">
+          <div class="metric-card">
+            <span>Günlük Dijital Check-list</span>
+            <strong id="heroChecklistCount">142</strong>
+            <small>Tamamlanan kayıt</small>
+          </div>
+          <div class="metric-card">
+            <span>Yakıt Verimlilik Skoru</span>
+            <strong id="heroEfficiencyCard">%87</strong>
+            <small>NoVa AI hesaplaması</small>
+          </div>
+          <div class="metric-card">
+            <span>AI Risk Skoru</span>
+            <strong id="heroRiskScore">72/100</strong>
+            <small>Operasyonel tahminleme</small>
+          </div>
+        </div>
+
+        <div class="app-card">
+          <div class="card-head">
             <h3>Yakıt ve Verimlilik Raporu</h3>
-            <small>Son 24 saat · Demo veri</small>
+            <small>Son 24 saat</small>
           </div>
 
           <div class="table-wrap">
@@ -242,22 +200,29 @@
             </table>
           </div>
         </div>
-      </div>
-    </section>
 
-    <section class="section" id="checklist">
-      <div class="container">
-        <div class="section-head">
-          <span class="eyebrow">OPERATÖR PANELİ</span>
-          <h2>Dijital Vardiya Check-list</h2>
-          <p>Kağıt formlar yerine tablet uyumlu hızlı teslim kontrol ekranı.</p>
+        <div class="app-card">
+          <div class="card-head">
+            <h3>Bakım Uyarıları</h3>
+            <small>Akıllı servis tahmini</small>
+          </div>
+          <div class="alert-list" id="maintenanceAlertList"></div>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-checklist">
+        <div class="section-title-row">
+          <div>
+            <h2>Operatör Check-list</h2>
+            <p>Tablet ve mobil kullanıma uygun</p>
+          </div>
         </div>
 
-        <div class="checklist-grid">
-          <div class="panel">
-            <div class="panel-head">
-              <h3>Check-list Formu</h3>
-              <small>Mobil / tablet uyumlu</small>
+        <div class="stack-grid">
+          <div class="app-card">
+            <div class="card-head">
+              <h3>Vardiya Formu</h3>
+              <small>2 dakikada tamamlanır</small>
             </div>
 
             <form id="checkForm" class="check-form">
@@ -288,59 +253,101 @@
                 <textarea placeholder="Kısa not girin..."></textarea>
               </label>
 
-              <button type="submit" class="btn btn-primary full">Check-list Kaydet</button>
+              <button type="submit" class="primary-btn full">Check-list Kaydet</button>
             </form>
           </div>
 
-          <div class="panel">
-            <div class="panel-head">
+          <div class="app-card">
+            <div class="card-head">
               <h3>Son İşlemler</h3>
-              <small>Demo kayıtlar</small>
+              <small>Canlı geçmiş</small>
             </div>
-
             <div class="timeline" id="timelineList"></div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section" id="activity">
-      <div class="container">
-        <div class="section-head">
-          <span class="eyebrow">CANLI OPERASYON AKIŞI</span>
-          <h2>Durum Değişimleri ve Sistem Olayları</h2>
-          <p>Bu alan demo amaçlı olarak otomatik güncellenir ve canlı operasyon hissi verir.</p>
-        </div>
-
-        <div class="panel">
-          <div class="panel-head">
-            <h3>Canlı Olay Akışı</h3>
-            <small>Otomatik güncelleniyor</small>
+      <section class="screen" id="screen-nova">
+        <div class="section-title-row">
+          <div>
+            <h2>NoVa AI Altyapısı</h2>
+            <p>Sistemin akıllı karar destek katmanı</p>
           </div>
-
-          <div class="live-feed" id="liveFeed"></div>
         </div>
-      </div>
-    </section>
 
-    <section class="section cta-section" id="contact">
-      <div class="container">
-        <div class="cta-card">
-          <span class="eyebrow">ENTERPRISE DEMO</span>
-          <h2>Operasyonunuza Özel Sunum Talep Edin</h2>
+        <div class="nova-hero-card">
+          <div class="nova-badge">NoVa AI Core</div>
+          <h3>Bu çözüm yalnızca takip yapmaz, yorumlar ve öneri üretir.</h3>
           <p>
-            Bu sayfa demo verilerle hazırlanmıştır. Gerçek saha ihtiyaçlarınıza göre
-            modüller, raporlar ve arayüzler özelleştirilebilir.
+            NoVa AI; yakıt sapmalarını, artan rölanti sürelerini, yaklaşan bakım risklerini
+            ve sahadaki verimsizlikleri analiz ederek yönetime karar desteği sunar.
           </p>
+        </div>
 
-          <div class="cta-actions">
-            <a class="btn btn-primary" href="mailto:info@ebrutechsystems.com">E-posta Gönder</a>
-            <a class="btn btn-secondary" href="https://ebrutechsystems.com" target="_blank" rel="noopener">Ana Siteye Git</a>
+        <div class="card-grid two">
+          <div class="app-card">
+            <div class="card-head">
+              <h3>NoVa AI Önerileri</h3>
+              <small>Canlı yorumlar</small>
+            </div>
+            <div class="nova-list" id="novaSuggestionList"></div>
+          </div>
+
+          <div class="app-card">
+            <div class="card-head">
+              <h3>AI Güçlü Fark</h3>
+              <small>Kurumsal konumlandırma</small>
+            </div>
+            <div class="value-points">
+              <div class="value-item">
+                <strong>Predictive bakım yaklaşımı</strong>
+                <p>Arıza oluşmadan önce servis ihtiyaçlarının öngörülmesi.</p>
+              </div>
+              <div class="value-item">
+                <strong>Yakıt verimsizlik tespiti</strong>
+                <p>Rölanti ve tüketim sapmalarına göre sistem uyarısı üretimi.</p>
+              </div>
+              <div class="value-item">
+                <strong>Yönetici karar desteği</strong>
+                <p>Ham veri yerine anlamlı operasyonel özetlerin sunulması.</p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-  </main>
+
+        <div class="feature-callout">
+          <div class="callout-icon">AI</div>
+          <div>
+            <strong>NoVa vurgusu</strong>
+            <p>Sunumlarda bu ürünü “NoVa AI destekli filo operasyon platformu” olarak konumlandır.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-tab="overview">
+        <span class="nav-icon">⌂</span>
+        <span class="nav-label">Genel</span>
+      </button>
+      <button class="nav-item" data-tab="operations">
+        <span class="nav-icon">▣</span>
+        <span class="nav-label">Operasyon</span>
+      </button>
+      <button class="nav-item" data-tab="analytics">
+        <span class="nav-icon">◎</span>
+        <span class="nav-label">Analiz</span>
+      </button>
+      <button class="nav-item" data-tab="checklist">
+        <span class="nav-icon">☑</span>
+        <span class="nav-label">Check-list</span>
+      </button>
+      <button class="nav-item" data-tab="nova">
+        <span class="nav-icon">✦</span>
+        <span class="nav-label">NoVa AI</span>
+      </button>
+    </nav>
+  </div>
 
   <div class="toast" id="toast">Check-list demo olarak kaydedildi.</div>
 

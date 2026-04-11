@@ -1,19 +1,10 @@
 const menuToggle = document.getElementById('menuToggle');
-const menu = document.getElementById('menu');
-const checkForm = document.getElementById('checkForm');
+const drawer = document.getElementById('drawer');
 const toast = document.getElementById('toast');
-
-if (menuToggle && menu) {
-  menuToggle.addEventListener('click', () => {
-    menu.classList.toggle('show');
-  });
-
-  document.querySelectorAll('.menu a').forEach(link => {
-    link.addEventListener('click', () => {
-      menu.classList.remove('show');
-    });
-  });
-}
+const checkForm = document.getElementById('checkForm');
+const navItems = document.querySelectorAll('.nav-item');
+const drawerLinks = document.querySelectorAll('.drawer-link');
+const screens = document.querySelectorAll('.screen');
 
 const dashboardState = {
   totalAssets: 186,
@@ -23,6 +14,7 @@ const dashboardState = {
   upcomingMaintenance: 24,
   efficiency: 87,
   fuelAlerts: 4,
+  riskScore: 72,
   telemetry: [
     { name: 'CAT 374 Ekskavatör', detail: 'Kazı Alanı A · Operatör: M. Kaya', status: 'active', label: 'Aktif' },
     { name: 'Komatsu HD785 Kaya Kamyonu', detail: 'Taşıma Koridoru · Operatör: A. Yılmaz', status: 'active', label: 'Aktif' },
@@ -52,15 +44,60 @@ const dashboardState = {
     { color: 'blue', title: 'Telemetri verisi güncellendi', text: 'Aktif makine sayısı yeniden hesaplandı.', time: '1 dk önce' },
     { color: 'yellow', title: 'Bakım planı güncellendi', text: '2 ekipman için servis planlaması oluşturuldu.', time: '3 dk önce' },
     { color: 'red', title: 'Yakıt alarmı üretildi', text: 'Bir araç için anormal tüketim kontrol listesine eklendi.', time: '5 dk önce' }
+  ],
+  novaSuggestions: [
+    { title: 'Yakıt optimizasyon önerisi', text: 'Komatsu HD785 üzerinde yüksek rölanti süresi tespit edildi. Vardiya alışkanlıkları gözden geçirilmeli.' },
+    { title: 'Bakım riski uyarısı', text: 'CAT 374 için yaklaşan servis periyodu üretim planına göre erkene çekilebilir.' },
+    { title: 'Operasyon verimlilik notu', text: 'Aktif/boşta oranına göre servis araçlarında bekleme süresi azaltılabilir.' }
   ]
 };
 
 const feedTemplates = [
-  { color: 'green', title: 'Check-list tamamlandı', text: 'Bir operatör vardiya başlangıç kontrolünü tamamladı.' },
-  { color: 'blue', title: 'Makine durumu değişti', text: 'Bir makinenin saha durumu merkez panele güncellendi.' },
+  { color: 'green', title: 'Check-list tamamlandı', text: 'Yeni operatör vardiya başlangıç kontrolü işlendi.' },
+  { color: 'blue', title: 'Makine durumu değişti', text: 'Bir makinenin saha aktivite durumu güncellendi.' },
   { color: 'yellow', title: 'Bakım planlaması önerildi', text: 'Yaklaşan servis ihtiyacı sistem tarafından işaretlendi.' },
-  { color: 'red', title: 'Yakıt sapması algılandı', text: 'Yakıt tüketim verisinde olağandışı bir artış tespit edildi.' }
+  { color: 'red', title: 'Yakıt sapması algılandı', text: 'Yakıt tüketim verisinde olağandışı artış görüldü.' }
 ];
+
+const novaInsightTemplates = [
+  'Komatsu HD785 için rölanti süresi yükseliyor. Yakıt verimliliği incelemesi öneriliyor.',
+  'CAT 374 üzerinde bakım planı erkene çekilirse arıza riski düşürülebilir.',
+  'Servis araçlarında bekleme süresi operasyon akışına göre optimize edilebilir.',
+  'Volvo EC480 için hidrolik takip verisi artan dikkat ihtiyacına işaret ediyor.'
+];
+
+function setActiveTab(tab) {
+  screens.forEach(screen => {
+    screen.classList.toggle('active', screen.id === `screen-${tab}`);
+  });
+
+  navItems.forEach(item => {
+    item.classList.toggle('active', item.dataset.tab === tab);
+  });
+
+  drawer.classList.remove('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+navItems.forEach(item => {
+  item.addEventListener('click', () => setActiveTab(item.dataset.tab));
+});
+
+drawerLinks.forEach(btn => {
+  btn.addEventListener('click', () => setActiveTab(btn.dataset.tabTarget));
+});
+
+if (menuToggle) {
+  menuToggle.addEventListener('click', () => {
+    drawer.classList.toggle('show');
+  });
+}
+
+if (drawer) {
+  drawer.addEventListener('click', e => {
+    if (e.target === drawer) drawer.classList.remove('show');
+  });
+}
 
 function pad(n) {
   return String(n).padStart(2, '0');
@@ -71,8 +108,28 @@ function timeNow() {
   return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-function createTelemetryRow(item) {
-  return `
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = value;
+  el.classList.remove('flash');
+  void el.offsetWidth;
+  el.classList.add('flash');
+}
+
+function randomBetween(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function randomChoice(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function renderTelemetry() {
+  const list = document.getElementById('telemetryList');
+  if (!list) return;
+
+  list.innerHTML = dashboardState.telemetry.map(item => `
     <div class="telemetry-row">
       <div>
         <strong>${item.name}</strong>
@@ -80,23 +137,13 @@ function createTelemetryRow(item) {
       </div>
       <span class="status ${item.status}">${item.label}</span>
     </div>
-  `;
+  `).join('');
 }
 
-function renderTelemetry() {
-  const list = document.getElementById('telemetryList');
-  const preview = document.getElementById('heroTelemetryPreview');
-  if (list) {
-    list.innerHTML = dashboardState.telemetry.map(createTelemetryRow).join('');
-  }
-  if (preview) {
-    preview.innerHTML = dashboardState.telemetry.slice(0, 3).map(createTelemetryRow).join('');
-  }
-}
-
-function renderMaintenanceAlerts() {
+function renderAlerts() {
   const list = document.getElementById('maintenanceAlertList');
   if (!list) return;
+
   list.innerHTML = dashboardState.maintenanceAlerts.map(item => `
     <div class="alert-item">
       <strong>${item.title}</strong>
@@ -108,6 +155,7 @@ function renderMaintenanceAlerts() {
 function renderFuelTable() {
   const body = document.getElementById('fuelTableBody');
   if (!body) return;
+
   body.innerHTML = dashboardState.fuelRows.map(row => `
     <tr>
       <td>${row.name}</td>
@@ -122,6 +170,7 @@ function renderFuelTable() {
 function renderTimeline() {
   const list = document.getElementById('timelineList');
   if (!list) return;
+
   list.innerHTML = dashboardState.timeline.map(item => `
     <div class="timeline-item">
       <strong>${item.title}</strong>
@@ -133,6 +182,7 @@ function renderTimeline() {
 function renderLiveFeed() {
   const list = document.getElementById('liveFeed');
   if (!list) return;
+
   list.innerHTML = dashboardState.liveFeed.map(item => `
     <div class="feed-item">
       <span class="feed-dot ${item.color}"></span>
@@ -145,42 +195,38 @@ function renderLiveFeed() {
   `).join('');
 }
 
-function setText(id, value) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = value;
-  el.classList.remove('flash');
-  void el.offsetWidth;
-  el.classList.add('flash');
+function renderNovaSuggestions() {
+  const list = document.getElementById('novaSuggestionList');
+  if (!list) return;
+
+  list.innerHTML = dashboardState.novaSuggestions.map(item => `
+    <div class="nova-item">
+      <strong>${item.title}</strong>
+      <p>${item.text}</p>
+    </div>
+  `).join('');
 }
 
 function updateNumbers() {
-  setText('heroTotalAssets', dashboardState.totalAssets);
-  setText('heroChecklistCount', dashboardState.checklistCount);
-  setText('heroCriticalCount', dashboardState.criticalCount);
-
   setText('metricActiveMachines', dashboardState.activeMachines);
-  setText('metricUpcomingMaintenance', dashboardState.upcomingMaintenance);
+  setText('metricCriticalAlerts', dashboardState.criticalCount);
   setText('metricEfficiency', `%${dashboardState.efficiency}`);
   setText('metricFuelAlerts', dashboardState.fuelAlerts);
 
   setText('statTotalFleet', dashboardState.totalAssets);
   setText('statActiveFleet', dashboardState.activeMachines);
   setText('statMaintenanceSoon', dashboardState.upcomingMaintenance);
-  setText('statCriticalAlerts', dashboardState.criticalCount);
+  setText('statCriticalCount', dashboardState.criticalCount);
 
-  const timeEl = document.getElementById('dashboardUpdateTime');
-  if (timeEl) {
-    timeEl.textContent = `Güncelleme: ${timeNow()}`;
-  }
-}
+  setText('heroChecklistCount', dashboardState.checklistCount);
+  setText('heroEfficiencyCard', `%${dashboardState.efficiency}`);
+  setText('heroRiskScore', `${dashboardState.riskScore}/100`);
 
-function randomBetween(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+  const updateTime = document.getElementById('dashboardUpdateTime');
+  if (updateTime) updateTime.textContent = `Güncelleme: ${timeNow()}`;
 
-function randomChoice(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
+  const insight = document.getElementById('novaInsightText');
+  if (insight) insight.textContent = randomChoice(novaInsightTemplates);
 }
 
 function mutateState() {
@@ -190,6 +236,7 @@ function mutateState() {
   dashboardState.fuelAlerts = Math.max(2, Math.min(8, dashboardState.fuelAlerts + randomBetween(-1, 1)));
   dashboardState.criticalCount = Math.max(6, Math.min(12, dashboardState.criticalCount + randomBetween(-1, 1)));
   dashboardState.checklistCount = Math.max(130, Math.min(180, dashboardState.checklistCount + randomBetween(0, 2)));
+  dashboardState.riskScore = Math.max(60, Math.min(88, dashboardState.riskScore + randomBetween(-2, 2)));
 
   const statuses = [
     { status: 'active', label: 'Aktif' },
@@ -253,20 +300,31 @@ function mutateState() {
       'Sistem bu ekipman için inceleme öneriyor.'
     ])
   };
+
+  dashboardState.novaSuggestions[0] = {
+    title: randomChoice([
+      'NoVa AI verimlilik yorumu',
+      'NoVa AI bakım tahmini',
+      'NoVa AI operasyon analizi'
+    ]),
+    text: randomChoice(novaInsightTemplates)
+  };
 }
 
 function renderAll() {
   updateNumbers();
   renderTelemetry();
-  renderMaintenanceAlerts();
+  renderAlerts();
   renderFuelTable();
   renderTimeline();
   renderLiveFeed();
+  renderNovaSuggestions();
 }
 
 if (checkForm) {
-  checkForm.addEventListener('submit', function (e) {
+  checkForm.addEventListener('submit', e => {
     e.preventDefault();
+
     dashboardState.checklistCount += 1;
     dashboardState.liveFeed.unshift({
       color: 'green',
