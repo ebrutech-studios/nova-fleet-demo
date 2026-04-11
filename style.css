@@ -465,7 +465,9 @@ main,
 
 .telemetry-list,
 .alert-list,
-.timeline {
+.timeline,
+.live-feed,
+.telemetry-preview {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -473,7 +475,8 @@ main,
 
 .telemetry-row,
 .alert-item,
-.timeline-item {
+.timeline-item,
+.feed-item {
   border-radius: 18px;
   padding: 16px;
   background: rgba(255,255,255,0.035);
@@ -489,17 +492,44 @@ main,
 
 .telemetry-row strong,
 .alert-item strong,
-.timeline-item strong {
+.timeline-item strong,
+.feed-item strong {
   display: block;
   margin-bottom: 6px;
 }
 
 .telemetry-row p,
 .alert-item p,
-.timeline-item p {
+.timeline-item p,
+.feed-item p {
   color: var(--muted);
   line-height: 1.5;
   font-size: 14px;
+}
+
+.feed-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: start;
+}
+
+.feed-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  margin-top: 6px;
+}
+
+.feed-dot.blue { background: var(--blue); }
+.feed-dot.green { background: var(--green); }
+.feed-dot.yellow { background: var(--yellow); }
+.feed-dot.red { background: var(--red); }
+
+.feed-time {
+  color: #b8c8de;
+  font-size: 12px;
+  white-space: nowrap;
 }
 
 .status {
@@ -662,6 +692,16 @@ tbody td {
   transform: translateY(0);
 }
 
+.flash {
+  animation: pulseGlow .6s ease;
+}
+
+@keyframes pulseGlow {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
 @media (max-width: 1100px) {
   .hero-grid,
   .modules-grid,
@@ -726,8 +766,14 @@ tbody td {
     padding: 18px;
   }
 
-  .telemetry-row {
+  .telemetry-row,
+  .feed-item {
+    grid-template-columns: 1fr;
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .feed-dot {
+    display: none;
   }
 }

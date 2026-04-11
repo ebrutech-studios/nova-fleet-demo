@@ -27,6 +27,7 @@
         <a href="#modules">Modüller</a>
         <a href="#dashboard">Dashboard</a>
         <a href="#checklist">Check-list</a>
+        <a href="#activity">Canlı Akış</a>
         <a href="#contact">İletişim</a>
       </nav>
 
@@ -58,15 +59,15 @@
           <div class="hero-mini-stats">
             <div class="mini-card">
               <span>Takip Edilen Varlık</span>
-              <strong>186</strong>
+              <strong id="heroTotalAssets">186</strong>
             </div>
             <div class="mini-card">
               <span>Bugünkü Dijital Check-list</span>
-              <strong>142</strong>
+              <strong id="heroChecklistCount">142</strong>
             </div>
             <div class="mini-card">
               <span>Kritik Uyarı</span>
-              <strong>9</strong>
+              <strong id="heroCriticalCount">9</strong>
             </div>
           </div>
         </div>
@@ -82,27 +83,27 @@
             <div class="metric-grid">
               <div class="metric-card">
                 <span>Aktif Makine</span>
-                <strong>161</strong>
+                <strong id="metricActiveMachines">161</strong>
                 <small>şu an sahada</small>
               </div>
               <div class="metric-card">
                 <span>Yaklaşan Bakım</span>
-                <strong>24</strong>
+                <strong id="metricUpcomingMaintenance">24</strong>
                 <small>50 saat içinde</small>
               </div>
               <div class="metric-card">
                 <span>Verimlilik Skoru</span>
-                <strong>%87</strong>
+                <strong id="metricEfficiency">%87</strong>
                 <small>son 24 saat</small>
               </div>
               <div class="metric-card">
                 <span>Yakıt Alarmı</span>
-                <strong>4</strong>
+                <strong id="metricFuelAlerts">4</strong>
                 <small>inceleme gerekli</small>
               </div>
             </div>
 
-            <div class="telemetry-preview">
+            <div class="telemetry-preview" id="heroTelemetryPreview">
               <div class="telemetry-row">
                 <div>
                   <strong>CAT 374</strong>
@@ -180,22 +181,22 @@
         <div class="stats-grid">
           <div class="stat-card">
             <span>Toplam Filo</span>
-            <strong>186</strong>
+            <strong id="statTotalFleet">186</strong>
             <small>Ağır iş makineleri + destek araçları</small>
           </div>
           <div class="stat-card">
             <span>Aktif Varlık</span>
-            <strong>161</strong>
+            <strong id="statActiveFleet">161</strong>
             <small>Sahada çalışan birimler</small>
           </div>
           <div class="stat-card warning">
             <span>Bakım Yaklaşan</span>
-            <strong>24</strong>
+            <strong id="statMaintenanceSoon">24</strong>
             <small>Planlama gerekli</small>
           </div>
           <div class="stat-card danger">
             <span>Kritik Uyarı</span>
-            <strong>9</strong>
+            <strong id="statCriticalAlerts">9</strong>
             <small>Hızlı aksiyon önerilir</small>
           </div>
         </div>
@@ -204,42 +205,10 @@
           <div class="panel">
             <div class="panel-head">
               <h3>Anlık Araç Durumu</h3>
-              <small>Güncelleme: 17:50</small>
+              <small id="dashboardUpdateTime">Güncelleme: --:--</small>
             </div>
 
-            <div class="telemetry-list">
-              <div class="telemetry-row big">
-                <div>
-                  <strong>CAT 374 Ekskavatör</strong>
-                  <p>Kazı Alanı A · Operatör: M. Kaya</p>
-                </div>
-                <span class="status active">Aktif</span>
-              </div>
-
-              <div class="telemetry-row big">
-                <div>
-                  <strong>Komatsu HD785 Kaya Kamyonu</strong>
-                  <p>Taşıma Koridoru · Operatör: A. Yılmaz</p>
-                </div>
-                <span class="status active">Aktif</span>
-              </div>
-
-              <div class="telemetry-row big">
-                <div>
-                  <strong>Volvo EC480</strong>
-                  <p>Bakım Alanına Yönlendirildi</p>
-                </div>
-                <span class="status service">Servis</span>
-              </div>
-
-              <div class="telemetry-row big">
-                <div>
-                  <strong>Mercedes Arocs Servis Aracı</strong>
-                  <p>Yakıt İkmal Noktası</p>
-                </div>
-                <span class="status idle">Beklemede</span>
-              </div>
-            </div>
+            <div class="telemetry-list" id="telemetryList"></div>
           </div>
 
           <div class="panel">
@@ -248,24 +217,7 @@
               <small>Otomatik planlama</small>
             </div>
 
-            <div class="alert-list">
-              <div class="alert-item">
-                <strong>CAT 374</strong>
-                <p>12 saat içinde bakım eşiğine ulaşacak.</p>
-              </div>
-              <div class="alert-item">
-                <strong>Komatsu HD785</strong>
-                <p>Motor saati kritik bakım sınırına yaklaşıyor.</p>
-              </div>
-              <div class="alert-item">
-                <strong>Volvo EC480</strong>
-                <p>Hidrolik sistem kontrolü öneriliyor.</p>
-              </div>
-              <div class="alert-item">
-                <strong>Arocs Servis Aracı</strong>
-                <p>Yağ değişimi planlaması gerekiyor.</p>
-              </div>
-            </div>
+            <div class="alert-list" id="maintenanceAlertList"></div>
           </div>
         </div>
 
@@ -286,36 +238,7 @@
                   <th>Skor</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>CAT 374</td>
-                  <td>8.4 saat</td>
-                  <td>312 L</td>
-                  <td>52 dk</td>
-                  <td><span class="pill good">İyi</span></td>
-                </tr>
-                <tr>
-                  <td>Komatsu HD785</td>
-                  <td>10.1 saat</td>
-                  <td>498 L</td>
-                  <td>95 dk</td>
-                  <td><span class="pill warn">İzlenmeli</span></td>
-                </tr>
-                <tr>
-                  <td>Volvo EC480</td>
-                  <td>4.2 saat</td>
-                  <td>141 L</td>
-                  <td>18 dk</td>
-                  <td><span class="pill good">İyi</span></td>
-                </tr>
-                <tr>
-                  <td>Arocs Servis</td>
-                  <td>6.7 saat</td>
-                  <td>74 L</td>
-                  <td>31 dk</td>
-                  <td><span class="pill bad">Düşük</span></td>
-                </tr>
-              </tbody>
+              <tbody id="fuelTableBody"></tbody>
             </table>
           </div>
         </div>
@@ -375,25 +298,27 @@
               <small>Demo kayıtlar</small>
             </div>
 
-            <div class="timeline">
-              <div class="timeline-item">
-                <strong>CAT 374</strong>
-                <p>07:12 · M. Kaya check-list tamamladı</p>
-              </div>
-              <div class="timeline-item">
-                <strong>Komatsu HD785</strong>
-                <p>07:18 · A. Yılmaz check-list tamamladı</p>
-              </div>
-              <div class="timeline-item">
-                <strong>Volvo EC480</strong>
-                <p>07:26 · Hidrolik uyarısı not edildi</p>
-              </div>
-              <div class="timeline-item">
-                <strong>Arocs Servis</strong>
-                <p>07:31 · Yakıt ikmal formu işlendi</p>
-              </div>
-            </div>
+            <div class="timeline" id="timelineList"></div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="activity">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">CANLI OPERASYON AKIŞI</span>
+          <h2>Durum Değişimleri ve Sistem Olayları</h2>
+          <p>Bu alan demo amaçlı olarak otomatik güncellenir ve canlı operasyon hissi verir.</p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Canlı Olay Akışı</h3>
+            <small>Otomatik güncelleniyor</small>
+          </div>
+
+          <div class="live-feed" id="liveFeed"></div>
         </div>
       </div>
     </section>
