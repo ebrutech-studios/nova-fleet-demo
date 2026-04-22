@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EbruTech Giriş</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body {
+  background: linear-gradient(135deg,#0f172a,#1e293b);
+  color:white;
+  font-family: sans-serif;
+}
+.container {
+  display:flex;
+  height:100vh;
+  justify-content:center;
+  align-items:center;
+}
+.card {
+  background: rgba(30,41,59,0.6);
+  padding:30px;
+  border-radius:16px;
+  width:300px;
+}
+input {
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border-radius:8px;
+  border:none;
+  background:#1e293b;
+  color:white;
+}
+button {
+  width:100%;
+  padding:10px;
+  margin-top:15px;
+  border-radius:8px;
+  border:none;
+  background:#3b82f6;
+  color:white;
+  font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="card">
+    <h2 style="font-size:20px;">Giriş Yap</h2>
+
+    <input id="email" placeholder="Email">
+    <input id="pass" type="password" placeholder="Şifre">
+
+    <button onclick="login()">Giriş</button>
+  </div>
+</div>
+
+<script>
+function login(){
+  const email = document.getElementById("email").value;
+  const pass = document.getElementById("pass").value;
+
+  if(email && pass){
+    localStorage.setItem("auth","true");
+    window.location.href="index.html";
+  } else {
+    alert("Bilgileri gir");
+  }
+}
+</script>
+
+</body>
+</html>
